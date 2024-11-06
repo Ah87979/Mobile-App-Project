@@ -1,5 +1,5 @@
 import { StyleSheet, Dimensions, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import { React, useState } from 'react';
 import { auth } from '../config';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -12,9 +12,6 @@ const Login = ({ navigation }) => {
     const [singnedIn, setSignedIn] = useState(false)
 
     const handleRegister = () => {
-       //auth: This is the Firebase authentication object, initialized earlier in the config.js
-       //.then(() => console.log("registered")): This is a promise-based then block that runs after the createUserWithEmailAndPassword operation is successful. If the user account is created successfully, it logs "registered" to the console.
-       //.catch((error) => console.log(error)): This is a catch block that runs if there is an error during the registration process, like if the email is already in use or the password is too weak.  
        createUserWithEmailAndPassword(auth, email, password)
         .then(() => console.log("registered"))
         .catch((error) => console.log(error))
@@ -34,7 +31,7 @@ const Login = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <Text style={{fontSize: 24}}>Login</Text>
             <TextInput placeholder='Email' style={styles.input} onChangeText={(txt)=>setEmail(txt)}/>
-            <TextInput placeholder='Password' style={styles.input} onChangeText={(txt)=>setPassword(txt)}/>
+            <TextInput placeholder='Password' style={styles.input} secureTextEntry={true} onChangeText={(txt)=>setPassword(txt)}/>
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.txt}>Login</Text>
             </TouchableOpacity>

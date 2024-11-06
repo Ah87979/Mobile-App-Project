@@ -7,7 +7,7 @@ const myFontSize = (width+height) * 0.02;
 const Home = () => {
     return (
         <SafeAreaView style={styles.container}>
-            <Text>My Flights</Text>
+            
         </SafeAreaView>
     )
 }
@@ -17,7 +17,7 @@ export default Home
 const styles = StyleSheet.create({
     container:{
         flex: 1,
-        // justifyContent: 'center',
+        justifyContent: 'center',
         alignItems: 'center',
     },
 })
