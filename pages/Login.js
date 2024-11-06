@@ -1,6 +1,6 @@
 import { StyleSheet, Dimensions, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
-import { auth, db } from '../config';
+import { auth } from '../config';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 
 const {width, height} = Dimensions.get('window');
@@ -9,6 +9,7 @@ const myFontSize = (width+height) * 0.02;
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
+    const [singnedIn, setSignedIn] = useState(false)
 
     const handleRegister = () => {
        //auth: This is the Firebase authentication object, initialized earlier in the config.js
@@ -17,25 +18,28 @@ const Login = ({ navigation }) => {
        createUserWithEmailAndPassword(auth, email, password)
         .then(() => console.log("registered"))
         .catch((error) => console.log(error))
-        }
-        const handleLogin = () => {
-            signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
+    }
+
+    const handleLogin = () => {
+        signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
             console.log('Logged in')
             navigation.replace('Home')
-            })
-            .catch((error) => {console.log(error.message);
-            setSignedIn(false)})
-            }
+        })
+        .catch((error) => {console.log(error.message);
+        setSignedIn(false)})
+    }
+    
     return (
         <SafeAreaView style={styles.container}>
-            <TextInput placeholder='Email' style={styles.txtIn} onChangeText={(txt)=>setEmail(txt)}/>
-            <TextInput placeholder='Password' style={styles.txtIn} onChangeText={(txt)=>setPassword(txt)}/>
-            <TouchableOpacity style={styles.touch} onPress={handleLogin}>
+            <Text style={{fontSize: 24}}>Login</Text>
+            <TextInput placeholder='Email' style={styles.input} onChangeText={(txt)=>setEmail(txt)}/>
+            <TextInput placeholder='Password' style={styles.input} onChangeText={(txt)=>setPassword(txt)}/>
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.txt}>Login</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touch} onPress={handleRegister}>
-                <Text style={styles.txt}>Register</Text>
+            <TouchableOpacity onPress={handleRegister}>
+                <Text style={styles.txt}>Don't have an account? Register now</Text>
             </TouchableOpacity>
         </SafeAreaView>
     )
@@ -48,20 +52,21 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'lightgrey',
     },
-    txtIn:{
+    input:{
         backgroundColor: 'snow',
         padding: myFontSize * 0.5,
         width: width * 0.85,
         marginTop: height * 0.02,
+        borderWidth: 1,
         borderRadius: 10,
     },
-    touch:{
+    button:{
         width: width/4,
         backgroundColor: 'lightblue',
-        marginTop: height * 0.02,
+        marginVertical: height * 0.02,
         padding: myFontSize * 0.5,
+        alignItems: 'center',
         borderRadius: 10,
     },
    
