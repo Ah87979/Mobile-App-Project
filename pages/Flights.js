@@ -50,8 +50,9 @@ const Flights = ({ navigation }) => {
     const Flight = ({item}) => (
         <View style={styles.flight}>
             <Text>{item.flightNo}</Text>
-            <Text>{item.originAirportCode}</Text>
-            <Text>{item.destinationAirportCode}</Text>
+            <Text style={styles.largeFont}>{item.originAirportCode}</Text>
+            <Text style={styles.largeFont}>{'->'}</Text>
+            <Text style={styles.largeFont}>{item.destinationAirportCode}</Text>
             <Text>{item.date}</Text>
             <TouchableOpacity onPress={() => navigation.navigate("Info", {item: item})}><Text>View Flight Information</Text></TouchableOpacity>
         </View>
@@ -78,7 +79,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     flight: {
-        backgroundColor: 'snow',
+        backgroundColor: 'cyan',
         marginVertical: 5,
+        padding: 10,
+    },
+    largeFont: {
+        fontSize: myFontSize * 0.8,
     },
 })
