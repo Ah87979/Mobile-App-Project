@@ -25,8 +25,8 @@ function AuthStackNavigator() {
 function FlightsStackNavigator() {
   return (
     <FlightsStack.Navigator screenOptions={{ headerShown: false }}>
-      <FlightsStack.Screen name="Flights" component={Flights} />
-      <FlightsStack.Screen name="Info" component={Info} />
+      <FlightsStack.Screen name="Flights" component={Flights} options={{headerStyle: { backgroundColor: 'cyan' }}} />
+      <FlightsStack.Screen name="Info" component={Info} options={{headerStyle: { backgroundColor: 'cyan' }}} />
     </FlightsStack.Navigator>
   );
 }

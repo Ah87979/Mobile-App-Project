@@ -6,7 +6,7 @@ import { doc, onSnapshot } from "firebase/firestore";
 const {width, height} = Dimensions.get('window');
 const myFontSize = (width+height) * 0.02;
 
-const Home = ({ navigation }) => {
+const Home = () => {
     return (
         <SafeAreaView style={styles.container}>
             <View>

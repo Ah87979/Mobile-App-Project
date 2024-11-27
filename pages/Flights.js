@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions, FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Dimensions, FlatList, Text, View, Button } from 'react-native';
 import { React, useState, useEffect } from 'react';
 import { db } from '../config';
 import { doc, setDoc, collection, onSnapshot, query } from "firebase/firestore";
@@ -50,17 +50,18 @@ const Flights = ({ navigation }) => {
     const Flight = ({item}) => (
         <View style={styles.flight}>
             <Text>{item.flightNo}</Text>
-            <Text style={styles.largeFont}>{item.originAirportCode}</Text>
-            <Text style={styles.largeFont}>{'->'}</Text>
-            <Text style={styles.largeFont}>{item.destinationAirportCode}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 150}}>
+                <Text style={styles.largeFont}>{item.originAirportCode}</Text>
+                <Text style={styles.largeFont}>{'->'}</Text>
+                <Text style={styles.largeFont}>{item.destinationAirportCode}</Text>
+            </View>
             <Text>{item.date}</Text>
-            <TouchableOpacity onPress={() => navigation.navigate("Info", {item: item})}><Text>View Flight Information</Text></TouchableOpacity>
+            <Button title="View Flight Info" onPress={() => navigation.navigate("Info", {item: item})} />
         </View>
     );
     
     return (
         <View style={styles.container}>
-            <Text>Available Flights</Text>
             <FlatList 
             data={flights} 
             renderItem={({item}) => <Flight item={item} />} 
@@ -79,9 +80,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     flight: {
-        backgroundColor: 'cyan',
+        backgroundColor: 'orange',
         marginVertical: 5,
         padding: 10,
+        borderRadius: 10,
     },
     largeFont: {
         fontSize: myFontSize * 0.8,
