@@ -23,20 +23,31 @@ const Info = ({ route }) => {
         </View>
       </View>
       <View style={styles.infoView}>
-        <MaterialCommunityIcons name={'calendar'} size={myFontSize * 0.6}/>
-        <Text>{item.date}</Text>
-        <MaterialCommunityIcons name={'airplane-takeoff'} size={myFontSize * 0.6}/>
-        <Text>{item.departureTime}</Text>
-        <MaterialCommunityIcons name={'airplane-landing'} size={myFontSize * 0.6}/>
-        <Text>{item.arrivalTime}</Text>
-        <MaterialCommunityIcons name={'airplane'} size={myFontSize * 0.6}/>
-        <Text>{item.flightNo}</Text>
-        <Text>{item.seatingOptions}</Text>
-        <MaterialCommunityIcons name={'cash'} size={myFontSize * 0.6}/>
-        <Text>US${item.ticketPrice}</Text>
+        <View style={{marginVertical: 5, flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons name={'airplane'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Flight No.: {item.flightNo}</Text>
+        </View>
+        <View style={{marginVertical: 5, flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons name={'calendar'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Departure Date: {item.date}</Text>
+        </View>
+        <View style={{marginVertical: 5, flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons name={'airplane-takeoff'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Departure Time: {item.departureTime}</Text>
+        </View>
+        <View style={{marginVertical: 5, flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons name={'airplane-landing'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Arrival Time: {item.arrivalTime}</Text>
+        </View>
+        <View style={{marginVertical: 5, flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons name={'cash'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Price: US${item.ticketPrice}</Text>
+        </View>
       </View>
       <View>
-        <TouchableOpacity><Text>Book Flight</Text></TouchableOpacity>
+        <TouchableOpacity style={{backgroundColor: 'orange', marginVertical: 15, paddingHorizontal: 50, paddingVertical: 15}}>
+          <Text style={{fontSize: myFontSize * 0.6}}>Book Flight</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
