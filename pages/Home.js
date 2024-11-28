@@ -1,27 +1,58 @@
-import { StyleSheet, Dimensions, SafeAreaView, Text, FlatList, View } from 'react-native';
-import { React, useEffect } from 'react';
+import { StyleSheet, Button, Dimensions, SafeAreaView, Text, FlatList, View } from 'react-native';
+import { React, useState, useEffect } from 'react';
 import { db } from "../config";
-import { collection, doc, where, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, where, query } from "firebase/firestore";
 
 const {width, height} = Dimensions.get('window');
 const myFontSize = (width+height) * 0.02;
 
-const Home = () => {
+const Home = ({ navigation}) => {
 
     const [flights, setFlights] = useState([]);
 
     useEffect(() => {
-        const unsubscribe = collection('flights')
-        .where('status', '==', 'booked')
-        .onSnapshot(querySnapshot => {
-            const flightsList = [];
-            querySnapshot.forEach(doc => {
-            flightsList.push({ id: doc.id, ...doc.data() });
-            });
-            setFlights(flightsList);
-        });
-        return () => unsubscribe();
+        getFlights();
     }, []);
+
+    const getFlights = async () => {
+        try {
+            const q = query(collection(db, "flights"), where("status", "==", true));
+            const unsubscribe = onSnapshot(q, (querySnapshot) => {
+                const itemsArray = [];
+                querySnapshot.forEach((doc) => {
+                    itemsArray.push({ ...doc.data(), id: doc.id });
+                });
+                setFlights(itemsArray);
+            });
+            return unsubscribe;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const cancel = async () => {
+        try {
+            const flightDocRef = doc(db, 'flights', item.id);
+            await updateDoc(flightDocRef, { status: false });
+            console.log('Document successfully updated!');
+            return { success: true };
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const Flight = ({item}) => (
+        <View style={styles.flight}>
+            <Text>{item.flightNo}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 150}}>
+                <Text style={styles.largeFont}>{item.originAirportCode}</Text>
+                <Text style={styles.largeFont}>{'->'}</Text>
+                <Text style={styles.largeFont}>{item.destinationAirportCode}</Text>
+            </View>
+            <Text>{item.date}</Text>
+            <Button title="Cancel Booking" onPress={cancel} />
+        </View>
+    );
 
     return (
         <SafeAreaView style={styles.container}>
@@ -29,15 +60,10 @@ const Home = () => {
                 <Text style={styles.header}>My Flights</Text>
             </View>
             <View>
-            <FlatList
-                data={flights}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => (
-                <View style={styles.itemContainer}>
-                    <Text style={styles.title}>{item.name}</Text>
-                    <Text>Destination: {item.destination}</Text>
-                </View>
-                )}
+            <FlatList 
+                data={flights} 
+                renderItem={({item}) => <Flight item={item} />} 
+                keyExtractor={item => item.id} 
             />
             </View>
         </SafeAreaView>
@@ -55,16 +81,13 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         marginVertical: 5,
     },
-    itemContainer: {
-        marginBottom: 15,
+    flight: {
+        backgroundColor: 'orange',
+        marginVertical: 5,
         padding: 10,
-        borderWidth: 1,
-        borderColor: '#ddd',
-        borderRadius: 8,
-        backgroundColor: '#f9f9f9',
+        borderRadius: 10,
     },
-    title: {
-        fontSize: 18,
-        fontWeight: 'bold',
+    largeFont: {
+        fontSize: myFontSize * 0.8,
     },
 })

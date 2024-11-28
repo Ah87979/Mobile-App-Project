@@ -1,5 +1,7 @@
 import React from 'react';
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { db } from '../config';
+import { doc, updateDoc} from 'firebase/firestore';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('window');
@@ -8,6 +10,18 @@ const myFontSize = (width+height) * 0.02;
 const Info = ({ route }) => {
 
   const { item } = route.params;
+
+  const bookFlight = async () => {
+    try {
+      const flightDocRef = doc(db, 'flights', item.id);
+      await updateDoc(flightDocRef, { status: true });
+      console.log('Document successfully updated!');
+      return { success: true };
+    } catch (error) {
+      console.error('Error updating document:', error);
+      return { success: false, error };
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -45,7 +59,7 @@ const Info = ({ route }) => {
         </View>
       </View>
       <View>
-        <TouchableOpacity style={{backgroundColor: 'orange', marginVertical: 15, paddingHorizontal: 50, paddingVertical: 15}}>
+        <TouchableOpacity onPress={bookFlight} style={{backgroundColor: 'orange', marginVertical: 15, paddingHorizontal: 50, paddingVertical: 15, borderRadius: 10}}>
           <Text style={{fontSize: myFontSize * 0.6}}>Book Flight</Text>
         </TouchableOpacity>
       </View>
