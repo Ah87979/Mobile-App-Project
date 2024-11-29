@@ -31,11 +31,11 @@ const History = () => {
 
   const Flight = ({ item }) => (
     <View style={styles.flight}>
-      <Text>{item.flightNo}</Text>
-      <Text>{"->"}</Text>
-      <Text>{item.destinationAirportCode}</Text>
-      <Text>{item.date}</Text>
-      <Text>{item.status}</Text>
+      <Text style={{marginHorizontal: 5}}>{item.flightNo}</Text>
+      <Text style={{marginHorizontal: 5}}>{item.originAirportCode}</Text>
+      <Text style={{marginHorizontal: 5}}>{"->"}</Text>
+      <Text style={{marginHorizontal: 5}}>{item.destinationAirportCode}</Text>
+      <Text style={{marginHorizontal: 5}}>{item.date}</Text>
     </View>
   );
 
@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
   },
   flight: {
     flexDirection: "row",
-    justifyContent: "space-around",
     marginVertical: 5,
     padding: 10,
     borderBottomWidth: 1,

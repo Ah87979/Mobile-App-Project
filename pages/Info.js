@@ -1,5 +1,5 @@
 import { React, useState, useEffect } from 'react';
-import { Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Dimensions, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db } from '../config';
 import { doc, updateDoc} from 'firebase/firestore';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -13,29 +13,36 @@ const Info = ({ route }) => {
   const { item } = route.params;
 
   useEffect(() => {
-    getSeats();
-  }, []);
+    if (item?.seatingOptions) {
+      getSeats(item.seatingOptions);
+    }
+  }, [item]);
 
-  const getSeats = () => {
-    const seatsArray = [];
-    const data = item.seatingOptions;
-    data.forEach((seat) => {
-      seatsArray.push(seat);
-    });
-    setSeats(seatsArray);
+  const getSeats = (options) => {
+    if (!options || !Array.isArray(options)) {
+      setSeats([]);
+    } else {
+      setSeats(options);
+    }
   };
-
+  
   const bookFlight = async () => {
     try {
       const flightDocRef = doc(db, 'flights', item.id);
       await updateDoc(flightDocRef, { bookedStatus: true });
-      console.log('Document successfully updated!');
+      Alert.alert('Success', 'Your flight has been booked!');
       return { success: true };
     } catch (error) {
-      console.error('Error updating document:', error);
+      Alert.alert('Error', 'Failed to book the flight. Please try again.');
       return { success: false, error };
     }
   };
+
+  const Seat = ({item}) => (
+    <View>
+      <Text>{item}</Text>
+    </View>
+);
 
   return (
     <View style={styles.container}>
@@ -56,6 +63,10 @@ const Info = ({ route }) => {
           <Text style={{fontSize: myFontSize * 0.6}}>Flight No.: {item.flightNo}</Text>
         </View>
         <View style={styles.info}>
+          <MaterialCommunityIcons name={'airplane-check'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Flight Type: {item.flightType}</Text>
+        </View>
+        <View style={styles.info}>
           <MaterialCommunityIcons name={'calendar'} size={myFontSize * 0.6}/>
           <Text style={{fontSize: myFontSize * 0.6}}>Departure Date: {item.date}</Text>
         </View>
@@ -68,14 +79,22 @@ const Info = ({ route }) => {
           <Text style={{fontSize: myFontSize * 0.6}}>Arrival Time: {item.arrivalTime}</Text>
         </View>
         <View style={styles.info}>
+          <MaterialCommunityIcons name={'seat'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Seating Options: </Text>
+          <FlatList 
+              data={seats} 
+              keyExtractor={item => item.id} 
+              renderItem={({item}) => <Seat item={item} />} 
+          />
+        </View>
+        <View style={styles.info}>
+          <MaterialCommunityIcons name={'cash'} size={myFontSize * 0.6}/>
+          <Text style={{fontSize: myFontSize * 0.6}}>Baggage Allowance: {item.baggageAllowance}</Text>
+        </View>
+        <View style={styles.info}>
           <MaterialCommunityIcons name={'cash'} size={myFontSize * 0.6}/>
           <Text style={{fontSize: myFontSize * 0.6}}>Price: US${item.ticketPrice}</Text>
         </View>
-        <FlatList 
-            data={seats} 
-            keyExtractor={item => item.id} 
-            renderItem={({item}) => <Text item={item} />} 
-        />
       </View>
       <View>
         <TouchableOpacity onPress={bookFlight} style={styles.button}>

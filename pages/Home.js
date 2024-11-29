@@ -1,4 +1,4 @@
-import { StyleSheet, Button, Dimensions, SafeAreaView, Text, FlatList, View } from 'react-native';
+import { StyleSheet, Alert, Button, Dimensions, SafeAreaView, Text, FlatList, View } from 'react-native';
 import { React, useState, useEffect } from 'react';
 import { db } from "../config";
 import { collection, doc, onSnapshot, updateDoc, where, query } from "firebase/firestore";
@@ -34,7 +34,7 @@ const Home = ({ navigation }) => {
         try {
             const flightDocRef = doc(db, 'flights', flightId);
             await updateDoc(flightDocRef, { bookedStatus: false });
-            console.log('Document successfully updated!');
+            Alert.alert("Success", "Flight cancelled successfully")
             return { success: true };
         } catch (error) {
             console.error(error);

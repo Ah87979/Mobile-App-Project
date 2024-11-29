@@ -1,27 +1,10 @@
 import { StyleSheet, Dimensions, FlatList, Text, View, Button } from 'react-native';
 import { React, useState, useEffect } from 'react';
 import { db } from '../config';
-import { doc, setDoc, collection, onSnapshot, query } from "firebase/firestore";
+import { collection, onSnapshot, query } from "firebase/firestore";
 
 const {width, height} = Dimensions.get('window');
 const myFontSize = (width+height) * 0.02;
-
-const writeThis = async() => {
-    const docRef = doc(db, "flights", "atl-sea")
-    await setDoc(docRef, {
-        flightNo: "DL350",
-        originCity: "Atlanta",
-        originAirportCode: "ATL",
-        destinationCity: "Seattle",
-        destinationAirportCode: "SEA",
-        departureTime: "14:45",
-        arrivalTime: "17:50",
-        ticketPrice: 280,
-        seatingOptions: ["Economy", "Comfort+", "First Class"]
-      })
-    .then(() => { console.log('data submitted') })
-    .catch((error) => { console.log(error.message) })
-}
 
 const Flights = ({ navigation }) => {
 
