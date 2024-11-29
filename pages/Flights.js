@@ -48,7 +48,7 @@ const Flights = ({ navigation }) => {
     }
 
     const Flight = ({item}) => (
-        <View style={styles.flight}>
+        <View style={[styles.flight, {backgroundColor: item.bookedStatus ? 'cyan' : 'gray'}]}>
             <Text>{item.flightNo}</Text>
             <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 150}}>
                 <Text style={styles.largeFont}>{item.originAirportCode}</Text>
@@ -63,9 +63,9 @@ const Flights = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <FlatList 
-            data={flights} 
-            renderItem={({item}) => <Flight item={item} />} 
-            keyExtractor={item => item.id} 
+                data={flights} 
+                renderItem={({item}) => <Flight item={item} />} 
+                keyExtractor={item => item.id} 
             />
         </View>
     )
@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     flight: {
-        backgroundColor: 'orange',
         marginVertical: 5,
         padding: 10,
         borderRadius: 10,

@@ -1,12 +1,12 @@
 import { StyleSheet, Button, Dimensions, SafeAreaView, Text, FlatList, View } from 'react-native';
 import { React, useState, useEffect } from 'react';
 import { db } from "../config";
-import { collection, onSnapshot, where, query } from "firebase/firestore";
+import { collection, doc, onSnapshot, updateDoc, where, query } from "firebase/firestore";
 
 const {width, height} = Dimensions.get('window');
 const myFontSize = (width+height) * 0.02;
 
-const Home = ({ navigation}) => {
+const Home = ({ navigation }) => {
 
     const [flights, setFlights] = useState([]);
 
@@ -16,7 +16,7 @@ const Home = ({ navigation}) => {
 
     const getFlights = async () => {
         try {
-            const q = query(collection(db, "flights"), where("status", "==", true));
+            const q = query(collection(db, "flights"), where("bookedStatus", "==", true));
             const unsubscribe = onSnapshot(q, (querySnapshot) => {
                 const itemsArray = [];
                 querySnapshot.forEach((doc) => {
@@ -30,10 +30,10 @@ const Home = ({ navigation}) => {
         }
     }
 
-    const cancel = async () => {
+    const cancel = async (flightId) => {
         try {
-            const flightDocRef = doc(db, 'flights', item.id);
-            await updateDoc(flightDocRef, { status: false });
+            const flightDocRef = doc(db, 'flights', flightId);
+            await updateDoc(flightDocRef, { bookedStatus: false });
             console.log('Document successfully updated!');
             return { success: true };
         } catch (error) {
@@ -50,7 +50,7 @@ const Home = ({ navigation}) => {
                 <Text style={styles.largeFont}>{item.destinationAirportCode}</Text>
             </View>
             <Text>{item.date}</Text>
-            <Button title="Cancel Booking" onPress={cancel} />
+            <Button title="Cancel Booking" onPress={() => cancel(item.id)} />
         </View>
     );
 
@@ -82,8 +82,8 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
     flight: {
-        backgroundColor: 'orange',
-        marginVertical: 5,
+        backgroundColor: 'cyan',
+        margin: 5,
         padding: 10,
         borderRadius: 10,
     },
